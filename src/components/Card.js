@@ -1,8 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import {MaterialIcons} from '@expo/vector-icons';
-import { useDispatch } from 'react-redux';
-import {useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import * as newsAction from '../redux/actions/newsAction';
 
@@ -12,18 +11,22 @@ const Card = props => {
     const isFav = useSelector(state => state.news.favorites.some(article => article.url === props.url));
 
     return(
-        <TouchableOpacity onPress={() => props.navigation.navigate('NewsDetails')}>
+        <TouchableOpacity onPress={() => {
+            props.navigation.navigate('NewsDetails', {
+                articleUrl: props.url
+            })
+        }}>
             <View style={styles.card}>
                 <View style={styles.imageWrapper}>
                     <Image 
                         // source={require('../../assets/news-demo.jpg')} 
-                        source={{uri: props.image}}
+                        source={{uri: props.image ? props.image : 'https://user-images.githubusercontent.com/16916934/27370350-c82d1c44-5679-11e7-9147-2e8adeb4c515.png'}}
                         style={styles.image}
                     />
                 </View>
                 <View style={styles.titleWrapper}>
                     <Text style={styles.title}>
-                        {props.title.length > 22 ? props.title.slice(0, 22) + '...' : props.title}
+                        {props.title && props.title.length > 22 ? props.title.slice(0, 22) + '...' : props.title}
                     </Text>
                     <MaterialIcons 
                         name={isFav ? 'favorite': 'favorite-border'} 
@@ -35,7 +38,7 @@ const Card = props => {
                 </View>
                 <View style={styles.descriptionWrapper}>
                     <Text style={styles.description}>
-                        {props.description.length > 100 ? props.description.slice(0, 100) + '...' : props.description}
+                        {props.description && props.description.length > 100 ? props.description.slice(0, 100) + '...' : props.description}
                     </Text>
                 </View>
             </View>
